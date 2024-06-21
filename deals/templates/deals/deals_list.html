@@ -1,0 +1,104 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block content %}
+<div class="information_top_dashboard">
+
+    {% if deals_count == 0 %}
+    <h4 class="mb-3">У Вас пока нет сделок.</h4>
+    <h5 class="mb-3">Сделки добавляются в карточке Вашего клиента.</h5>
+    <a href="{% url 'clients:clients_main' %}" class="btn btn-success" style="color: white !important">
+        Перейти в раздел
+        <b>клиенты</b>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+        <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
+        <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+      </svg>
+    </a>
+    {% else %}
+    <h4 class="mb-3">Всего активных сделок: <span class="my_badge">{{ deals_count }}</span></h4>
+    {% endif %}
+    {% for deal in deals %}
+    <div class="card mb-3" style="border-radius: 15px">
+        <div class="card-body">
+
+            <h4 class="card-title">
+            {{ deal.organization.name }}
+                {% if user.is_staff %}<hr>Менеджер: {{ deal.manager.first_name }} {{ deal.manager.last_name }}<hr>{% endif %}
+            </h4>
+            <div class="card-subtitle mb-2 text-muted">
+            {% if deal.service %}<p style="color: blue">{{ deal.service }}</p>
+                {% else %}<p style="color: red">Услуга пока не определена.</p>
+                {% endif %}
+            </div>
+
+            <button class="btn btn-primary mb-2" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#CollapseDealPreDetail{{ deal.id }}">
+                Подробнее
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"></path>
+            </svg>
+            </button>
+            <div class="card-text collapse" id="CollapseDealPreDetail{{ deal.id }}">
+                <ul>
+                    <li>
+                        Статус: {{ deal.get_status_display }}
+                    </li>
+                    <li>
+                        Сделка создана: {{ deal.created_date }}
+                    </li>
+
+                    <li>
+                        Последние изменения: {{ deal.updated_date }}
+                    </li>
+                    <li>
+                        {% if deal.contracts.exists %} Договор №{{ deal.contracts.all.last.contract_number }}
+                        <a style="color: blue !important" href="{{ deal.contracts.all.last.contract_text.url }}">
+                            - Скачать
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
+                            <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
+                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                            </svg>
+                        </a>
+                        {% else %}<span style="color: red">Договора пока нет</span>{% endif %}
+                    </li>
+                    <li>
+                        id сделки: {{ deal.id }}
+                    </li>
+                    <hr>
+                    {% if deal.cost_price %}
+                    <li>
+                        Себестоимость: ₽{{ deal.cost_price|floatformat:"g" }}
+                    </li>
+                    {% endif %}
+                    {% if deal.price %}
+                    <li>
+                        Стоимость: ₽{{ deal.price|floatformat:"g" }}
+                    </li>
+                    {% endif %}
+                    {% if deal.price and deal.cost_price %}
+                    <li>
+                        Ожидаемая прибыль: ₽{{ deal.get_net_profit|floatformat:"g" }}
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <div class="client_detail_button">
+                <a href="{{ deal.get_absolute_url }}" class="btn btn-success" style="color: white !important">
+                    Открыть
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-index" viewBox="0 0 16 16">
+                        <path d="M6.75 1a.75.75 0 0 1 .75.75V8a.5.5 0 0 0 1 0V5.467l.086-.004c.317-.012.637-.008.816.027.134.027.294.096.448.182.077.042.15.147.15.314V8a.5.5 0 1 0 1 0V6.435l.106-.01c.316-.024.584-.01.708.04.118.046.3.207.486.43.081.096.15.19.2.259V8.5a.5.5 0 0 0 1 0v-1h.342a1 1 0 0 1 .995 1.1l-.271 2.715a2.5 2.5 0 0 1-.317.991l-1.395 2.442a.5.5 0 0 1-.434.252H6.035a.5.5 0 0 1-.416-.223l-1.433-2.15a1.5 1.5 0 0 1-.243-.666l-.345-3.105a.5.5 0 0 1 .399-.546L5 8.11V9a.5.5 0 0 0 1 0V1.75A.75.75 0 0 1 6.75 1M8.5 4.466V1.75a1.75 1.75 0 1 0-3.5 0v5.34l-1.2.24a1.5 1.5 0 0 0-1.196 1.636l.345 3.106a2.5 2.5 0 0 0 .405 1.11l1.433 2.15A1.5 1.5 0 0 0 6.035 16h6.385a1.5 1.5 0 0 0 1.302-.756l1.395-2.441a3.5 3.5 0 0 0 .444-1.389l.271-2.715a2 2 0 0 0-1.99-2.199h-.581a5 5 0 0 0-.195-.248c-.191-.229-.51-.568-.88-.716-.364-.146-.846-.132-1.158-.108l-.132.012a1.26 1.26 0 0 0-.56-.642 2.6 2.6 0 0 0-.738-.288c-.31-.062-.739-.058-1.05-.046zm2.094 2.025"/>
+                        </svg>
+                </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+
+</div>
+
+
+
+{% endblock %}

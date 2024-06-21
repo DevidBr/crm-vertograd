@@ -1,0 +1,27 @@
+.login-form {
+
+}
+
+.login_form_form {
+
+}
+
+.errorlist {
+    color: red;
+}
+
+.login_form_button {
+    margin: auto;
+    margin-top: 15px;
+}
+
+
+@media (max-width: 767px) {
+    .login-form {
+        min-width: 100%! !important;
+    }
+
+    .login_form_form {
+        min-width: 100% !important;
+    }
+}

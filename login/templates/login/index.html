@@ -1,0 +1,41 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'login/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'login/login_stile.css' %}">
+    <title>Document</title>
+</head>
+<body>
+
+
+    <div class="login-form container d-flex flex-column justify-content-center align-items-center vh-100">
+        <div class="small_logo"><img src="{% static 'login/small_logo.png' %}" alt=""></div>
+        <form action="" method="post" class="login_form_form">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="invalid-feedback">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <button type="submit" class="btn btn-success login_form_button d-flex">Войти</button>
+        </form>
+    </div>
+
+
+</body>
+</html>

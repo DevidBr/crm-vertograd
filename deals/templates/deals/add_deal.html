@@ -1,0 +1,15 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block content %}
+
+<div class="information_top_dashboard">
+    <h3>Новая сделка для клиента {{ client.name }}</h3>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="add_client_form">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-success">Добавить сделку</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+{% block content %}
+
+<div class="information_top_dashboard">
+    <div class="card card-body" style="border-radius: 15px;">
+        <h4 class="card-title">Запрос проекта договора по сделке №{{ deal.id }}. Клиент: {{ deal.organization.name }}, услуга: {{ deal.service }}.</h4>
+        <div class="card card-body" style="border-radius: 15px;">
+            <h5 class="card-title">Информация о сделке</h5>
+            <div class="card-text">
+                <ul>
+                    <li>
+                        Клиент: {{ deal.organization.name }}
+                    </li>
+                    <li>
+                        Услуга: {{ deal.service }}
+                    </li>
+                    <li>
+                        Сделка создана: {{ deal.created_date }}
+                    </li>
+                    <li>
+                        Последние изменения: {{ deal.updated_date }}
+                    </li>
+                    <li>
+                        {% if deal.commercial_offers.all.last %}
+                        <a style="color: blue !important" href="{{ deal.commercial_offers.all.last.image.url }}">
+                            Коммерческое предложение исх.№ {{ deal.commercial_offers.all.last.number }} от {{ deal.commercial_offers.all.last.date }}
+                        </a>
+                        {% else %}
+                        <div style="color: red">Коммерческого предложения пока нет</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        Описание: {{ deal.description }}
+                    </li>
+                    <li>
+                        id сделки: {{ deal.id }}
+                    </li>
+                    <hr>
+                    {% if deal.cost_price %}
+                    <li>
+                        Себестоимость: ₽{{ deal.cost_price|floatformat:"g" }}
+                    </li>
+                    {% endif %}
+                    {% if deal.price %}
+                    <li>
+                        Стоимость: ₽{{ deal.price|floatformat:"g" }}
+                    </li>
+                    {% endif %}
+                    {% if deal.price and deal.cost_price %}
+                    <li>
+                        Ожидаемая прибыль: ₽{{ deal.get_net_profit|floatformat:"g" }}
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+
+
+        <div class="card card-body mt-2" style="border-radius: 15px;">
+            <h5 class="card-title">Описание предварительных условий договора.</h5>
+            <div class="card-text">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ contract_request_form.description }}
+                    {{ contract_request_form.deal }}
+                    {{ contract_request_form.creator }}
+                    <button type="submit" class="btn btn-success mt-2">
+                        Отправить запрос руководителю.
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+<button class="btn btn-warning" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasConfirmSentCommercialOfferToClient" aria-controls="offcanvasTop">КП направлено клиенту</button>
+
+
+<div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasConfirmSentCommercialOfferToClient" aria-labelledby="offcanvasTopLabel" style="min-height: 50vh;">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasTopLabel">ВНИМАНИЕ!</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="card card-body">
+      <div class="alert alert-danger" role="alert">
+        <p>Не забудь убедиться, что КП доставлено до клиента. </p>
+        <p>Если это было письмо, то необходимо убедиться, что оно не улетело в спам.</p>
+      </div>
+    </div>
+    <form action="{% url 'deals:commercial_offer_has_been_sent_to_the_client' deal.pk %}" method="post">
+      {% csrf_token %}
+    <button class="btn btn-success mt-2">Я уверен, что информация получена клиентом.</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <a href="{% url 'bot:bot_test_send_message' %}" class="btn btn-success">Тестовое сообщение боту</a>
+</div>
+
+{% endblock %}

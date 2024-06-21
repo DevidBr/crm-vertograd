@@ -1,0 +1,33 @@
+<div class="card card-body mt-3">
+    <h5 style="color: red">Перед отправкой клиенту, КП необходимо сохранить.</h5>
+    <form class="row" action="{% url 'deals:commercial_offer_save' deal.pk %}" method="post" enctype="multipart/form-data" id="addCommercialOfferForm">
+        {% csrf_token %}
+
+        <div class="col-auto" style="padding-right: 2px !important">
+            <h6 class="mt-2">{{ add_commercial_offer_form.number.label }}</h6>
+        </div>
+
+        <div class="col-auto commercial_offer_number_input">
+        {{ add_commercial_offer_form.number }}
+        </div>
+
+        <div class="col-auto" style="padding-right: 2px !important">
+        <h6 class="mt-2">{{ add_commercial_offer_form.date.label }}</h6>
+        </div>
+
+        <div class="col-auto commercial_offer_date_input">
+        {{ add_commercial_offer_form.date }}
+        </div>
+
+        <div class="col-auto">
+        {{ add_commercial_offer_form.image }}
+        </div>
+
+        {{ add_commercial_offer_form.counter_number }}
+        {{ add_commercial_offer_form.creator }}
+
+        <div class="col-auto">
+            <button type="submit" class="btn btn-success">Сохранить</button>
+        </div>
+    </form>
+</div>

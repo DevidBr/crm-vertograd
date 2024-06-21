@@ -1,0 +1,45 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block content %}
+<div class="information_top_dashboard">
+    <div class="card card-body">
+        <h4 class="card-title">Список запросов договоров:</h4>
+
+        <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Клиент</th>
+      <th scope="col">Открыть</th>
+      <th scope="col">Услуга</th>
+      <th scope="col">Дата</th>
+      <th scope="col">Менеджер</th>
+      <th scope="col">Статус</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for contract_request in contract_requests %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ contract_request.deal.organization.name }}</td>
+      <td><a class="btn btn-success" href="{{ contract_request.get_absolute_url }}">Открыть</a></td>
+      <td>{{ contract_request.deal.service }}</td>
+      <td>{{ contract_request.created_date }}</td>
+      <td>{{ contract_request.deal.manager.last_name }} {{ contract_request.deal.manager.first_name }}</td>
+        {% if contract_request.status == "1" %}
+           <td style="color: red">{{ contract_request.get_status_display }}</td>
+        {% elif contract_request.status == "2" %}
+           <td style="color: green">{{ contract_request.get_status_display }}</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+    </div>
+
+</div>
+
+
+
+{% endblock %}

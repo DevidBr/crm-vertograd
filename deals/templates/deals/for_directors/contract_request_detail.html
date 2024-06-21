@@ -1,0 +1,76 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'deals/css/jquery-ui.min.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="information_top_dashboard mb-5">
+    <div class="card card-body">
+        <h4 class="card-title">Запрос договора для сделки №{{ contract_request.deal.pk }}:</h4>
+        <div class="card-text">
+            <ul>
+                <li>Клиент: {{ contract_request.deal.organization.name }}</li>
+                <li>Услуга: {{ contract_request.deal.service }}</li>
+                <li>Менеджер: {{ contract_request.deal.manager.last_name }} {{ contract_request.deal.manager.first_name }}</li>
+                <li>Статус запроса: {{ contract_request.get_status_display }}</li>
+            </ul>
+        </div>
+
+        <div class="card card-body">
+            <h4 class="card-title">Комментарии к запросу договора:</h4>
+            <div class="card card-text p-3">
+                {{ contract_request.description }}
+            </div>
+        </div>
+
+
+            <h4 class="card-title mt-3">Создание договора:</h4>
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+
+                <div class="container mt-3">
+
+                    {{ contract_create_form.deal }}
+
+                    <div class="row mt-3">
+                        <div class="col-5" style="padding-left: 0 !important">
+                        {{ contract_create_form.contract_number.label }}*:
+                        {{ contract_create_form.contract_number }}
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-5" style="padding-left: 0 !important">
+                        {{ contract_create_form.contract_date.label }}*:
+                        {{ contract_create_form.contract_date }}
+                    </div>
+
+
+                    <div class="row mt-3">
+                        <div class="col-5" style="padding-left: 0 !important">
+                        {{ contract_create_form.contract_text.label }}*:
+                        {{ contract_create_form.contract_text }}
+                        </div>
+                    </div>
+
+
+                </div>
+                <hr>
+
+
+                <button class="btn btn-success mt-3" type="submit">Сохранить договор</button>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extrascripts %}
+<script src="{% static 'deals/js/jquery-ui.min.js' %}"></script>
+<script src="{% static 'deals/js/contract_create_scripts.js' %}"></script>
+{% endblock %}

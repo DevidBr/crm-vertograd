@@ -1,0 +1,145 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    text-decoration: none;
+}
+
+a {
+    text-decoration: none !important;
+    color: black !important;
+}
+
+.dashboard_main {
+    display: flex !important;
+    flex-direction: row;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+}
+
+.dashboard_main .left_column {
+    border-right: 2px solid #c5e879;;
+    flex: 1;
+    margin: 0;
+    background-color: #d4eca1;
+    padding: 25px 15px 0px;
+    min-height: 100vh;
+}
+
+.dashboard_main .left_column h5 {
+    transition: .3s;
+    margin-bottom: 10px;
+}
+
+.dashboard_main .left_column h5:hover {
+    transform: scale(1.03);
+    color: green !important;
+}
+
+
+.dashboard_main .right_column {
+    flex: 6;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-right: 20px;
+    background-color: #f9fbf7;
+    min-height: 100vh;
+}
+
+.navbar {
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 90px;
+    border-bottom: 1px solid rgb(85 162 106 / 55%)
+}
+
+.information_top_dashboard {
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+.add_client_form {
+    background-color: rgb(245 247 242 / 70%) !important;
+    padding: 25px;
+    border-radius: 15px;
+}
+
+.add_contact_form {
+    background-color: rgb(245 247 242 / 70%) !important;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.client_card {
+    background-color: rgb(245 247 242 / 70%) !important;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.my_badge {
+    background-color: #198754;
+    padding: 2px 8px;
+    border-radius: 15px;
+    color: white;
+}
+
+.my_badge_small {
+    background-color: #198754;
+    padding: 4px 8px;
+    border-radius: 15px;
+    color: white;
+}
+
+.btn {
+    color: white !important;
+}
+
+.btn-warning {
+    color: black !important;
+}
+
+.detailDealChangeService > select {
+    width: 100% !important;
+    margin-right: 10px !important;
+}
+
+#getPriceModal > .modal-dialog > .modal-content {
+    width: 800px !important;
+}
+
+.commercial_offer_number_input {
+    width: 100px !important;
+    padding-right: 0 !important;
+}
+
+.commercial_offer_date_input {
+    padding-left: 0 !important;
+}
+
+.list-group-item #id_telephone {
+    padding-left: 5px;
+    border: 1px solid #ced4da !important;
+    border-radius: .25rem !important;
+}
+
+.list-group-item #id_email {
+    padding-left: 5px;
+    border: 1px solid #ced4da !important;
+    border-radius: .25rem !important;
+}
+
+.list-group-item #id_whatsapp {
+    padding-left: 5px;
+    border: 1px solid #ced4da !important;
+    border-radius: .25rem !important;
+}
+
+.list-group-item #id_telegram {
+    padding-left: 5px;
+    border: 1px solid #ced4da !important;
+    border-radius: .25rem !important;
+}

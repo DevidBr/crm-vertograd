@@ -1,0 +1,247 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+{% block content %}
+<div class="information_top_dashboard">
+    <h1>Сделка для клиента {{ deal.organization.name }}</h1>
+    <div class="card" style="border-radius: 15px">
+        <div class="card-body">
+            <div class="progress mb-2" style="height: 25px">
+              <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                   role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"
+                   style="width:
+                   {% if deal.status == '1' %}8%
+                   {% elif deal.status == '2' %}16%
+                   {% elif deal.status == '3' %}24%
+                   {% elif deal.status == '4' %}32%
+                   {% elif deal.status == '5' %}40%
+                   {% elif deal.status == '6' %}48%
+                   {% elif deal.status == '7' %}56%
+                   {% elif deal.status == '8' %}64%
+                   {% elif deal.status == '9' %}72%
+                   {% elif deal.status == '10' %}80%
+                   {% elif deal.status == '11' %}98%
+                   {% elif deal.status == '12' %}100%
+                   {% endif %}">
+              </div>
+            </div>
+        <h5 class="subtitle">
+        Статус сделки: {{ deal.get_status_display }}
+        </h5>
+
+            <!--            Открыть кнопка перехода на страницу запроса стоимости-->
+            {% if deal.status == '2' %}
+            <a class="btn btn-warning" href="{% url 'deals:request_price' deal.pk %} ">Запрос стоимости</a>
+            {% endif %}
+            <!--            End-->
+
+            <p>
+                <div class="alert d-none" role="alert" id="alertForDeal">
+                Тут будет текст alert
+                </div>
+                <div class="progress d-none" id="loadChangeServiceBar" style="height: 10px !important">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 0%; height: 10px"></div>
+                </div>
+            </p>
+
+            {% if deal.status == '3' %}
+                <a class="btn btn-warning" href="{% url 'deals:price_request_detail' deal.price_request.pk %}">
+                    Открыть запрос стоимости
+                </a>
+            {% endif %}
+
+            {% if deal.status == '4' %}
+                {% include 'deals/incl/add_commercial_offer_form.html' %}
+            {% endif %}
+
+            {% if deal.status == '5' %}
+                {% include 'deals/incl/commercial_offer_has_been_sent_to_the_client.html' %}
+            {% endif %}
+
+            {% if deal.status == '6' %}
+            <a href="{% url 'deals:contract_request' deal.pk %}" class="btn btn-warning">
+                Переговоры завершены, условия договора согласованы. Запросить договор у руководителя
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-earmark-text-fill" viewBox="0 0 16 16">
+                <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M4.5 9a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 0 1z"/>
+                </svg>
+            </a>
+            {% endif %}
+
+            {% if deal.status == '8' %}
+                {% include 'deals/incl/status_8_activity.html' %}
+            {% endif %}
+
+
+
+        <h3 class="card-title">
+            {% if user.is_staff %}<hr>Менеджер: {{ deal.manager.first_name }} {{ deal.manager.last_name }}<hr>{% endif %}
+        </h3>
+            <div class="card-subtitle">
+                {% if deal.service %}<p style="color: blue">Услуга: {{ deal.service }}</p>
+                    {% else %}
+                <p style="color: red" class="mb-3">
+                    Услуга: Ещё не определена.
+
+
+
+<!--                    button для открытия collapseDealServiceChange ниже-->
+
+                      <button class="btn btn-warning ms-3" style="height: 37.6px !important" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDealServiceChange">
+                        Выбрать услугу
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="20.000000pt" height="20.000000pt" viewBox="0 0 200.000000 200.000000" preserveAspectRatio="xMidYMid meet">
+                        <g transform="translate(0.000000,200.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
+                        <path d="M1292 1539 c-62 -24 -139 -96 -166 -157 -17 -38 -36 -55 -36 -33 0 18 -93 70 -146 81 -60 13 -154 5 -180 -15 -17 -12 -17 -15 -1 -57 25 -64 79 -123 142 -154 47 -23 64 -26 125 -22 l70 4 0 -106 0 -105 -73 -12 c-41 -7 -100 -24 -133 -38 l-59 -26 -62 17 c-82 22 -144 15 -229 -26 -49 -23 -90 -35 -139 -39 -62 -5 -70 -9 -73 -28 -7 -48 100 -41 223 15 117 53 145 50 392 -36 110 -38 209 -74 218 -79 15 -9 15 -10 0 -23 -30 -25 -122 -23 -235 4 -91 21 -107 23 -120 10 -25 -25 6 -40 139 -69 110 -25 129 -26 176 -16 68 15 139 73 132 108 -4 19 6 29 57 62 123 77 195 102 245 83 21 -8 -2 -26 -234 -186 -141 -98 -276 -184 -298 -193 -83 -29 -242 2 -420 84 -94 43 -107 46 -186 47 -76 1 -86 -1 -89 -18 -6 -28 15 -36 92 -36 61 0 81 -6 169 -46 182 -83 358 -113 458 -79 57 20 613 404 617 427 8 40 -126 71 -213 49 -39 -10 -55 -9 -113 9 -37 11 -94 24 -127 28 l-60 7 -3 145 -3 146 103 -1 c96 0 107 2 156 29 63 35 112 87 147 155 35 71 33 88 -12 100 -64 18 -191 13 -251 -10z m205 -35 l22 -6 -18 -37 c-23 -44 -83 -102 -131 -127 -39 -20 -182 -26 -200 -8 -14 14 39 94 84 129 59 45 172 68 243 49z m-519 -139 c43 -19 79 -50 98 -87 8 -15 14 -29 14 -32 0 -12 -91 -17 -131 -6 -47 13 -139 95 -139 125 0 21 108 20 158 0z m315 -465 c26 -7 47 -15 47 -19 -1 -3 -37 -28 -81 -54 l-81 -49 -136 48 -136 47 40 14 c21 8 57 18 79 23 51 12 205 5 268 -10z"/>
+                        </g></svg>
+                      </button>
+                </p>
+
+            </div>
+
+            <!-- collapse для выбора недостающей услуги -->
+            <div class="collapse" id="collapseDealServiceChange">
+                <div class="card card-body">
+                    <form action="{% url 'deals:deal_change_service' deal_id=deal.id %}" method="post" id="changeServiceInDeal">
+                        {% csrf_token %}
+                        {{ change_add_deal_form.service }}
+                        <button class="btn btn-success mt-3" type="submit" id="addServiceButton">Сохранить
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                        <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+                        </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+                {% endif %}
+            <!-- конец collapse для выбора услуги-->
+
+            <div class="card-text">
+                <ul>
+                    <li>
+                        <b>Статус: {{ deal.get_status_display }}</b>
+                    </li>
+                    <li>
+                        Сделка создана: {{ deal.created_date }}
+                    </li>
+
+                    <li>
+                        Последние изменения: {{ deal.updated_date }}
+                    </li>
+                    <li>
+                        {% if deal.commercial_offers.all.last %}
+                        <a style="color: blue !important" href="{{ deal.commercial_offers.all.last.image.url }}">
+                            Коммерческое предложение исх.№ {{ deal.commercial_offers.all.last.number }} от {{ deal.commercial_offers.all.last.date }}
+                        </a>
+                        {% else %}
+                        <div style="color: red">Коммерческого предложения пока нет</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% if deal.contracts.exists %} Договор №{{ deal.contracts.all.last.contract_number }}
+                        <a style="color: blue !important" href="{{ deal.contracts.all.last.contract_text.url }}">
+                            - Скачать
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
+                            <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
+                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                            </svg>
+                        </a>
+                        {% else %}<span style="color: red">Договора пока нет</span>{% endif %}
+                    </li>
+                    <li>
+                        Описание: {{ deal.description }}
+                    </li>
+                    <li>
+                        id сделки: {{ deal.id }}
+                    </li>
+                    <hr>
+                    {% if deal.cost_price %}
+                    <li>
+                        Себестоимость: ₽{{ deal.cost_price|floatformat:"g" }}
+                    </li>
+                    {% endif %}
+                    {% if deal.price %}
+                    <li>
+                        Стоимость: ₽{{ deal.price|floatformat:"g" }}
+                    </li>
+                    {% endif %}
+                    {% if deal.price and deal.cost_price %}
+                    <li>
+                        Ожидаемая прибыль: ₽{{ deal.get_net_profit|floatformat:"g" }}
+                    </li>
+                    {% if request.user.is_staff %}
+                    <a href="{% url 'deals:price_request_detail' deal.price_request.pk %}" class="btn btn-danger">Изменить стоимость</a>
+                    {% endif %}
+                    {% endif %}
+                </ul>
+
+            <button type="button" data-bs-toggle="collapse" data-bs-target="#CollapseDealClientContacts"
+                    class="btn btn-primary mb-3">
+                Контакты
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"></path>
+            </svg>
+            </button>
+                <div class="card collapse p-3" style="border-radius: 15px" id="CollapseDealClientContacts">
+                    {% for contact in deal.organization.contact_person.all %}
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <a class="btn btn-success"  href="{{ contact.get_absolute_url }}" style="color: white !important">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+                                </svg>
+                                {{ contact.name }}</a> ({{ contact.job_title }}), тел.{{ contact.telephone }}
+                        </li>
+                    </ul>
+                    {% endfor %}
+                        <div class="mt-3" style="padding-left: 15px">
+                        <a href="{% url 'clients:client_add_contact' client_id=deal.organization.pk %}" class="btn btn-success w-50" style="color: white !important">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
+                        <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                        <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                        </svg>
+                        Добавить еще контактное лицо в <b>{{ deal.organization.name }}</b>
+                        </a>
+                        </div>
+                </div>
+            </div>
+            <hr>
+
+            <h3>Комментарии к сделке</h3>
+            {% for comment in deal.comments.all %}
+            <div class="card mb-3">
+                <div class="card-header" style="">{{ comment.created_date }} | автор: {{ comment.author.first_name }} {{ comment.author.last_name }}</div>
+                <div class="card-body" style="background-color: rgb(225 229 219) !important;">
+                <div class="card-text" style="background-color: rgb(225 229 219) !important;">
+                        {{ comment.text }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <button type="button" data-bs-toggle="collapse" data-bs-target="#CollapseDealAddComment"
+                    class="btn btn-warning mb-3">
+                +
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-text" viewBox="0 0 16 16">
+                <path d="M2.678 11.894a1 1 0 0 1 .287.801 11 11 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8 8 0 0 0 8 14c3.996 0 7-2.807 7-6s-3.004-6-7-6-7 2.808-7 6c0 1.468.617 2.83 1.678 3.894m-.493 3.905a22 22 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a10 10 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105"/>
+                <path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8m0 2.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5"/>
+                </svg>
+                Добавить комментарий
+            </button>
+
+            <div class="card collapse" id="CollapseDealAddComment">
+                <form action="" method="post" class="p-3 card-header">
+                    {% csrf_token %}
+                    {{ add_comment_form }}
+                    <button class="btn btn-warning mt-3" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
+</svg>
+                        Сохранить комментарий</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extrascripts %}
+<script src="{% static 'deals/js/deal_detail_scripts.js' %}"></script>
+{% endblock %}
